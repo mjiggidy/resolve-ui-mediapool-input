@@ -38,7 +38,8 @@ class _MPIFolderInfo:
 			_logger.debug("Set current folder ignored because unchanged")
 			return False
 
-		self._folder_path   = self._format_folder_path(folders.get_path_from_folder(folder))
+		root_folder = self._project_manager.GetCurrentProject().GetMediaPool().GetRootFolder()
+		self._folder_path   = self._format_folder_path(folders.get_path_from_folder(folder, relative_to=root_folder))
 		self._folder_handle = folder
 
 		self._send_callback(MPILineEditCallbacks.CURRENT_FOLDER_CHANGED, folder)
