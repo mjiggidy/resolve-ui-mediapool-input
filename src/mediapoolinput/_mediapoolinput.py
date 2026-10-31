@@ -11,12 +11,21 @@ _logger = logging.getLogger(__name__)
 class MPILineEditController:
 	"""Transforms a LineEdit into a Media Pool Input"""
 
-	def __init__(self, project_manager:dvrtypes.ProjectManager, line_edit:object):
+	def __init__(self,
+	    project_manager:dvrtypes.ProjectManager,
+		line_edit:object,
+		/,
+		start_folder:dvrtypes.Folder|None=None
+	):
 
 		self._folder_tracker   = _MPIFolderInfo(project_manager)
 
 		self._line_edit        = line_edit
 		self._last_edit_length = len(self._line_edit.Text)
+
+		self.set_path_from_folder(
+			start_folder or project_manager.GetCurrentProject().GetMediaPool().GetRootFolder()
+		)
 
 	def register_window_handle(self, window_handle:object):
 		"""Register `TextEdited` event with dispatcher window handle"""
