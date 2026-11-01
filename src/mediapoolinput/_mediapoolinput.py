@@ -14,17 +14,18 @@ class MPILineEditController:
 	def __init__(self,
 	    project_manager:dvrtypes.ProjectManager,
 		line_edit:object,
-		/,
-		start_folder:dvrtypes.Folder|None=None
+#		/,
+#		start_folder:dvrtypes.Folder|None=None
 	):
 
 		self._folder_tracker   = _MPIFolderInfo(project_manager)
 
 		self._line_edit        = line_edit
-		self._last_edit_length = len(self._line_edit.Text)
+		self._last_edit_length = 0
 
-		self.set_path_from_folder(
-			start_folder or project_manager.GetCurrentProject().GetMediaPool().GetRootFolder()
+		self.set_path_from_text(
+			self._line_edit.Text,
+			show_autocomplete=False,
 		)
 
 	def register_window_handle(self, window_handle:object):

@@ -20,7 +20,7 @@ class _MPIFolderInfo:
 		self._project_manager = project_manager
 
 		self._folder_handle:dvrtypes.Folder|None = None
-		self._folder_path:str = ""
+		self._folder_path:str = None # TODO: Think of a better way to keep folder_path in an invalid state until set
 
 		self._subfolder_is_valid = False
 
