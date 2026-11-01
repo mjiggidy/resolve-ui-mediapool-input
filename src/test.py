@@ -28,7 +28,7 @@ mpi_controller.current_folder_info().register_callback(MPILineEditCallbacks.PATH
 
 mpi_controller.register_window_handle(win_test)
 
-win_test.On[win_test.ID].Close = lambda e: dispatcher.EndLoop(0)
+win_test.On[win_test.ID].Close = lambda e: dispatcher.ExitLoop(0)
 
 win_test.Show()
 
