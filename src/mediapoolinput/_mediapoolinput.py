@@ -23,10 +23,10 @@ class MPILineEditController:
 		self._line_edit        = line_edit
 		self._last_edit_length = 0
 
-		self.set_path_from_text(
-			self._line_edit.Text,
-			show_autocomplete=False,
-		)
+#		self.set_path_from_text(
+#			self._line_edit.Text,
+#			show_autocomplete=False,
+#		)
 
 	def register_window_handle(self, window_handle:object):
 		"""Register `TextEdited` event with dispatcher window handle"""
