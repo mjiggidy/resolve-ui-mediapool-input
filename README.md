@@ -1,0 +1,1 @@
+This is a little thing I'm doin' here that takes a Fusion UI `LineEdit` and makes it into a "Media Pool input" by which I mean the user can type a Davinci Resolve media pool path and this thing here will offer autocomplete suggestions, and fire little callback thingies when path validity changes okay thanks.
