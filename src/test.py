@@ -32,4 +32,7 @@ win_test.On[win_test.ID].Close = lambda e: dispatcher.ExitLoop(0)
 
 win_test.Show()
 
+current_folder = resolve.GetProjectManager().GetCurrentProject().GetMediaPool().GetCurrentFolder()
+mpi_controller.set_path_from_folder(current_folder)
+
 dispatcher.RunLoop()
