@@ -7,7 +7,7 @@ name = "resolve-ui-mediapool-input"
 version = "0.1.0"
 description = "Media Pool Input Controller for Davinci Resolve"
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.13"
 license = { text = "GPL-3.0-or-later" }
 authors = [
     { name = "Michael Jordan", email = "michael@glowingpixel.com" }
