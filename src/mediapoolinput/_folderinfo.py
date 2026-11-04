@@ -9,6 +9,9 @@ if typing.TYPE_CHECKING:
 
 _logger = logging.getLogger(__name__)
 
+PATH_SEP = folders.PATH_SEP
+"""Path separators for media pool paths"""
+
 class _MPIFolderInfo:
 	"""Current media pool folder and subfolder info for a given folder"""
 
@@ -121,9 +124,7 @@ class _MPIFolderInfo:
 	def subfolder_paths(self) -> list[str]:
 		"""List of available subfolder paths"""
 
-		#print("Folder path:", self.folder_path())
-
-		return [str(self.folder_path() + "/" + f.GetName()).lstrip("/") for f in self.subfolder_handles()]
+		return [str(self.folder_path() + PATH_SEP + f.GetName()).lstrip(PATH_SEP) for f in self.subfolder_handles()]
 
 	def register_callback(self, callback:MPILineEditCallbacks, callback_function:typing.Callable):
 		"""Register a callback function"""

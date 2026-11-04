@@ -1,7 +1,7 @@
 from __future__ import annotations
 import logging, typing
 
-from ._folderinfo import _MPIFolderInfo
+from ._folderinfo import _MPIFolderInfo, PATH_SEP
 
 if typing.TYPE_CHECKING:
 	import DaVinciResolveScript as dvrtypes
@@ -57,8 +57,8 @@ class MPILineEditController:
 		cursor_position = self._line_edit.CursorPosition
 
 		# Prepend a slash to the root folder so that "first-level" folders become the partial folder name when split
-		sanitized_text:str = "/" + path_text if not path_text.startswith("/") else path_text
-		base_path, partial_folder_name = sanitized_text.rsplit("/", 1)
+		sanitized_text:str = PATH_SEP + path_text if not path_text.startswith(PATH_SEP) else path_text
+		base_path, partial_folder_name = sanitized_text.rsplit(PATH_SEP, 1)
 
 		try:
 			self._folder_tracker._set_folder_path(base_path)
@@ -103,7 +103,7 @@ class MPILineEditController:
 	def _on_user_finished_path(self, event:dict):
 		"""Reformat/standardize user input"""
 
-		self._line_edit.Text = self._line_edit.Text.strip("/")
+		self._line_edit.Text = self._line_edit.Text.strip(PATH_SEP)
 
 	def _on_user_modified_path(self, event:dict):
 		"""Test event for media pool browser thing"""
