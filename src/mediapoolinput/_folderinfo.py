@@ -12,9 +12,6 @@ _logger = logging.getLogger(__name__)
 class _MPIFolderInfo:
 	"""Current media pool folder and subfolder info for a given folder"""
 
-	STRIP_MASTER_FROM_PATH = True
-	"""Exclude `/Master/` from paths"""
-
 	def __init__(self, project_manager:dvrtypes.ProjectManager):
 
 		self._project_manager = project_manager
@@ -49,11 +46,9 @@ class _MPIFolderInfo:
 	def _format_folder_path(self, folder_path_raw:str) -> str:
 		"""Format folder string for display"""
 
-		if self.STRIP_MASTER_FROM_PATH and folder_path_raw.startswith("/Master"):
-			return folder_path_raw[len("/Master/"):]
+		# NOTE: Deprecating?
 
-		else:
-			return folder_path_raw
+		return folder_path_raw
 
 	def _set_folder_path(self, folder_path:str) -> bool:
 		"""Set the current folder from a given path string.  Returns `True` if the folder changed since last."""

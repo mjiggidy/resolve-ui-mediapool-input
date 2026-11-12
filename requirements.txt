@@ -1,1 +1,1 @@
-resolve-common @ git+https://github.com/mjiggidy/resolve-common.git@v0.2
+resolve-common @ git+https://github.com/mjiggidy/resolve-common.git@v0.3
