@@ -48,7 +48,10 @@ class MPILineEditController:
 
 		folder_path = self._folder_tracker.base_folder_path()
 
-		self.set_path_from_text(folder_path)
+		if folder_path is None:
+			_logger.error("Base folder path is invalid")
+
+		self.set_path_from_text(folder_path or "")
 		self._line_edit.SelectAll()
 
 	def set_path_from_text(self, path_text:str, show_autocomplete:bool=True):
