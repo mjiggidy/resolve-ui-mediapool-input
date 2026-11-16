@@ -1,5 +1,8 @@
+import logging
 import DaVinciResolveScript as bmd
 from mediapoolinput import MPILineEditController, MPILineEditCallbacks
+
+logging.basicConfig(level=logging.DEBUG)
 
 fusion  = bmd.scriptapp("fusion")
 resolve = bmd.scriptapp("resolve")
@@ -23,7 +26,7 @@ mpi_controller = MPILineEditController(
 #	start_folder=resolve.GetProjectManager().GetCurrentProject().GetMediaPool().GetCurrentFolder()
 )
 
-mpi_controller.current_folder_info().register_callback(MPILineEditCallbacks.CURRENT_FOLDER_CHANGED, lambda e: print(f"Current folder changed; {e.GetName()}"))
+mpi_controller.current_folder_info().register_callback(MPILineEditCallbacks.CURRENT_FOLDER_CHANGED, lambda e: print(f"Current folder changed; {e.GetName() if e else "[[None]]"}"))
 mpi_controller.current_folder_info().register_callback(MPILineEditCallbacks.PATH_VALIDITY_CHANGED,  lambda e: print(f"Path validity changed;  {e}"))
 
 mpi_controller.register_window_handle(win_test)
