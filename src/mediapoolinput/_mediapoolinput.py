@@ -44,9 +44,9 @@ class MPILineEditController:
 	def set_path_from_folder(self, folder:object):
 		"""Set the current path from a given media pool folder object"""
 
-		self._folder_tracker._set_folder(folder)
+		self._folder_tracker.set_base_folder_handle(folder)
 
-		folder_path = self._folder_tracker.folder_path()
+		folder_path = self._folder_tracker.base_folder_path()
 
 		self.set_path_from_text(folder_path)
 		self._line_edit.SelectAll()
@@ -61,23 +61,23 @@ class MPILineEditController:
 		base_path, partial_folder_name = sanitized_text.rsplit("/", 1)
 
 		try:
-			self._folder_tracker._set_folder_path(base_path)
+			self._folder_tracker.set_base_folder_path(base_path)
 	
 		except FileNotFoundError as e:
 			
 			_logger.error("Invalid media pool folder: %s", e)
-			self._folder_tracker._clear_folder()
+			self._folder_tracker.clear_base_folder()
 
 		# Determine autocomplete for a valid folder path
-		if self._folder_tracker.folder_is_valid() and show_autocomplete:
+		if self._folder_tracker.base_folder_is_valid() and show_autocomplete:
 		
 			next_subfolder_name = next(
-				filter(lambda f: f.startswith(partial_folder_name), self._folder_tracker.subfolder_names()),
+				filter(lambda f: f.startswith(partial_folder_name), self._folder_tracker.sub_folder_names()),
 				""
 			)
 			next_subfolder_autocomplete = next_subfolder_name[len(partial_folder_name):]
 			
-			self._folder_tracker._validate_subfolder_name(next_subfolder_name)
+			self._folder_tracker.validate_sub_folder_name(next_subfolder_name)
 
 			self._line_edit.Text = path_text + next_subfolder_autocomplete
 			self._line_edit.SetSelection(len(self._line_edit.Text), -len(next_subfolder_autocomplete))
@@ -85,18 +85,17 @@ class MPILineEditController:
 		# Set text verbatim if the path is invalid, something other than the current input, or autocomplete is unwanted
 		elif self._line_edit.Text != path_text:
 
-			self._folder_tracker._validate_subfolder_name(partial_folder_name)
+			self._folder_tracker.validate_sub_folder_name(partial_folder_name)
 
 			self._line_edit.Text = path_text
 
 		# Otherwise restore cursor position (can sometimes lose its offset when a combobox clears its items I guess)
 		else:
 
-			self._folder_tracker._validate_subfolder_name(partial_folder_name)
+			self._folder_tracker.validate_sub_folder_name(partial_folder_name)
 			self._line_edit.SetCursorPosition(cursor_position)
 
 		self._last_edit_length = len(path_text)
-
 
 		_logger.debug("Edit length set to %s", self._last_edit_length)
 	
