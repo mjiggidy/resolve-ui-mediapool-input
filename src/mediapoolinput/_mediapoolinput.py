@@ -1,5 +1,5 @@
 from __future__ import annotations
-import logging, typing
+import logging, typing, re
 
 from ._folderinfo import _MPIFolderInfo
 
@@ -14,19 +14,12 @@ class MPILineEditController:
 	def __init__(self,
 	    project_manager:dvrtypes.ProjectManager,
 		line_edit:object,
-#		/,
-#		start_folder:dvrtypes.Folder|None=None
 	):
 
 		self._folder_tracker   = _MPIFolderInfo(project_manager)
 
 		self._line_edit        = line_edit
 		self._last_edit_length = 0
-
-#		self.set_path_from_text(
-#			self._line_edit.Text,
-#			show_autocomplete=False,
-#		)
 
 	def register_window_handle(self, window_handle:object):
 		"""Register `TextEdited` event with dispatcher window handle"""
@@ -57,11 +50,13 @@ class MPILineEditController:
 	def set_path_from_text(self, path_text:str, show_autocomplete:bool=True):
 		"""Set the current path from text, and autocomplete with suggestion"""
 
+		sep = self._folder_tracker.path_separator()
+
 		cursor_position = self._line_edit.CursorPosition
 
 		# Prepend a slash to the root folder so that "first-level" folders become the partial folder name when split
-		sanitized_text:str = "/" + path_text if not path_text.startswith("/") else path_text
-		base_path, partial_sub_folder_name = sanitized_text.rsplit("/", 1)
+		sanitized_text:str = sep + path_text if not path_text.startswith(sep) else path_text
+		base_path, partial_sub_folder_name = sanitized_text.rsplit(sep, 1)
 
 		self._folder_tracker.set_base_folder_path(base_path)
 
@@ -94,11 +89,21 @@ class MPILineEditController:
 		self._last_edit_length = len(path_text)
 
 		_logger.debug("Edit length set to %s", self._last_edit_length)
+
+	def current_path(self) -> str:
+		"""The current path, as entered"""
+
+		return self._line_edit.Text
+
+	def line_edit(self) -> object:
+		"""Return the line edit widget"""
+
+		return self._line_edit
 	
 	def _on_user_finished_path(self, event:dict):
 		"""Reformat/standardize user input"""
 
-		self._line_edit.Text = self._line_edit.Text.strip("/")
+		self._line_edit.Text = self._line_edit.Text.strip(self._folder_tracker.path_separator())
 
 	def _on_user_modified_path(self, event:dict):
 		"""Test event for media pool browser thing"""
