@@ -17,7 +17,7 @@ class _MPIFolderInfo:
 		self._project_manager = project_manager
 
 		self._base_folder_handle:dvrtypes.Folder|None = None
-		self._base_folder_path:str = None # TODO: Think of a better way to keep folder_path in an invalid state until set
+		self._base_folder_path:str = None
 
 		self._sub_folder_is_valid = False
 
@@ -66,6 +66,8 @@ class _MPIFolderInfo:
 		"""Set the current folder from a given path string.  Returns `True` if the folder changed since last."""
 
 		if self._base_folder_path == folder_path:
+			
+			_logger.debug("No change in base folder path")
 			return False
 
 		try:
@@ -97,7 +99,7 @@ class _MPIFolderInfo:
 			return False
 
 		self._base_folder_handle = None
-		self._base_folder_path   = ""
+		self._base_folder_path   = None
 
 		self._send_callback(MPILineEditCallbacks.CURRENT_FOLDER_CHANGED, self._base_folder_handle)
 
@@ -117,7 +119,7 @@ class _MPIFolderInfo:
 
 		return self._base_folder_handle
 
-	def base_folder_path(self) -> str:
+	def base_folder_path(self) -> str|None:
 		"""The current folder"""
 
 		return self._base_folder_path
@@ -147,7 +149,12 @@ class _MPIFolderInfo:
 
 		path_was_valid = self._sub_folder_is_valid
 
-		self._sub_folder_is_valid = subfolder_name in self.sub_folder_names()
+		# Use parent folder validity when no subfolder name given
+		if not subfolder_name and self.base_folder_is_valid():
+			self._sub_folder_is_valid = True
+
+		else:
+			self._sub_folder_is_valid = subfolder_name in self.sub_folder_names()
 
 		if path_was_valid is not self._sub_folder_is_valid:
 			self._send_callback(MPILineEditCallbacks.PATH_VALIDITY_CHANGED, self._sub_folder_is_valid)
@@ -157,5 +164,9 @@ class _MPIFolderInfo:
 	def sub_folder_paths(self) -> list[str]:
 		"""List of available subfolder paths"""
 
-		return [str(self.base_folder_path() + "/" + f.GetName()).lstrip("/") for f in self.sub_folder_handles()]
+		return [str(self.base_folder_path() + self.path_separator() + f.GetName()).lstrip(self.path_separator()) for f in self.sub_folder_handles()]
 
+	def path_separator(self) -> str:
+		"""The path separator in use"""
+
+		return folders.PATH_SEP
