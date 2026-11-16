@@ -58,8 +58,15 @@ class _MPIFolderInfo:
 
 		root_folder = self._project_manager.GetCurrentProject().GetMediaPool().GetRootFolder()
 
-		self._folder_handle = folders.get_folder_from_path(folder_path, root_folder)
-		self._folder_path   = self._format_folder_path(folder_path)
+		try:
+			
+			self._folder_handle = folders.get_folder_from_path(folder_path, root_folder)
+			self._folder_path   = self._format_folder_path(folder_path)
+
+		except FileNotFoundError:
+
+			_logger.error("Invalid folder path: %s", folder_path)
+			return self._clear_folder()
 
 		self._send_callback(MPILineEditCallbacks.CURRENT_FOLDER_CHANGED, self._folder_handle)
 
