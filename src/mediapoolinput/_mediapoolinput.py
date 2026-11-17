@@ -103,7 +103,16 @@ class MPILineEditController:
 	def _on_user_finished_path(self, event:dict):
 		"""Reformat/standardize user input"""
 
-		self._line_edit.Text = self._line_edit.Text.strip(self._folder_tracker.path_separator())
+		sep = self._folder_tracker.path_separator()
+
+		text_og = self._line_edit.Text
+
+		text_sanitized = re.sub(f"(?:\s*{re.escape(sep)}\s*)+", sep, text_og).strip(sep)
+
+		if self._line_edit.Text != text_sanitized:
+			_logger.debug("Sanitized %s to %s",  text_og, text_sanitized)
+
+		self._line_edit.Text = text_sanitized
 
 	def _on_user_modified_path(self, event:dict):
 		"""Test event for media pool browser thing"""
