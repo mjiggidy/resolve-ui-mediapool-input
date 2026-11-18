@@ -107,7 +107,7 @@ class MPILineEditController:
 
 		text_og = self._line_edit.Text
 
-		text_sanitized = re.sub(f"(?:\s*{re.escape(sep)}\s*)+", sep, text_og).strip(sep)
+		text_sanitized = re.sub(rf"(?:\s*{re.escape(sep)}\s*)+", sep, text_og).strip(sep)
 
 		if self._line_edit.Text != text_sanitized:
 			_logger.debug("Sanitized %s to %s",  text_og, text_sanitized)
